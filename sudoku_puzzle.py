@@ -34,6 +34,7 @@ from solver import DfsSolver
 
 EMPTY_CELL = ' '
 
+#TODO yo mama
 
 class SudokuPuzzle(Puzzle):
     """
