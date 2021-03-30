@@ -96,7 +96,7 @@ class ExprTree:
         """
         return self._root is None
 
-    # TODO (Task 4): implement eval
+    # TODO (Task 4): implement eval[DONE]
     def eval(self, lookup: Dict[str, int]) -> int:
         """
         Evaluate this expression tree and return the result.
@@ -118,8 +118,30 @@ class ExprTree:
         >>> exp_t.eval(look_up)
         31
         """
+        if self._root is None:
+            return 0
+        elif self._root not in OPERATORS:
+            # number or variable, no children
+            if isinstance(self._root, int):
+                return self._root
+            # it's a variable, has to be in lookup cuz precondition
+            return lookup[self._root]
+        if self._root == OP_ADD:
+            # eval all subtrees and apply operator
+            # cuz ur adding...DUDE ITS MAT224 BRO ITS THE ADDITIVE IDENTITY
+            a = 0
+            for child in self._subtrees:
+                a += child.eval(lookup)
+            return a
+        if self._root == OP_MULTIPLY:
+            # eval all subtrees and apply operator
+            # DUDE ITS THE MULTIPLICATIVE IDENTITY!!! WOW!!!!!!!!!!!!
+            b = 1
+            for child in self._subtrees:
+                b *= child.eval(lookup)
+            return b
 
-    # TODO (Task 4): implement __str__
+    # TODO (Task 4): implement __str__[DONE]
     def __str__(self) -> str:
         """
         Return a string representation of this expression tree
@@ -129,6 +151,8 @@ class ExprTree:
                                    ExprTree(3, [])])
         >>> str(exp_t) == '(a + b + 3)'
         True
+        >>> str(exp_t)
+        '(a + b + 3)'
         >>> exp_t = ExprTree(None, [])
         >>> str(exp_t) == '()'
         True
@@ -150,8 +174,23 @@ class ExprTree:
         >>> print(exp_t)
         (3 + (x * y) + x)
         """
+        # tree is empty
+        if self._root is None:
+            return '()'
+        # no subtrees, root is a variable
+        elif str(self._root) not in OPERATORS:
+            return str(self._root)
+        # root is + or *
+        else:
+            strung = '('
+            for i in range(0, len(self._subtrees)):
+                strung += str(self._subtrees[i])
+                if i < len(self._subtrees) - 1:
+                    strung += ' ' + self._root + ' '
+            strung += ')'
+            return strung
 
-    # TODO (Task 4): implement __eq__
+    # TODO (Task 4): implement __eq__[DONE]
     def __eq__(self, other: ExprTree) -> bool:
         """
         Return whether this ExprTree is equivalent to <other>.
@@ -168,8 +207,18 @@ class ExprTree:
         >>> t2 == ExprTree('*', [])
         False
         """
+        if self._root != other._root:
+            return False
+        elif self._subtrees != other._subtrees:
+            return False
+        else:
+            # subtree lists are the same so we can iterate
+            for i in range(0, len(self._subtrees)):
+                if self._subtrees[i] != other._subtrees[i]:
+                    return False
+            return True
 
-    # TODO (Task 4): implement substitute
+    # TODO (Task 4): implement substitute[DONE]
     def substitute(self, from_to: Dict[Union[str, int],
                                        Union[str, int]]) -> None:
         """
@@ -191,8 +240,18 @@ class ExprTree:
         >>> print(exp_t)
         (2 + (2 + 1))
         """
+        if self._root is None:
+            return
+        else:
+            # change root if whatever
+            if self._root in from_to:
+                self._root = from_to[self._root]
+            # run this on each subtree
+            for child in self._subtrees:
+                child.substitute(from_to)
+            pass
 
-    # TODO (Task 4): implement populate_lookup
+    # TODO (Task 4): implement populate_lookup[DONE]
     def populate_lookup(self, lookup: Dict[str, int]) -> None:
         """
         Add entries to <lookup> so it contains a key for all variables
@@ -206,7 +265,37 @@ class ExprTree:
         True
         >>> len(look_up) == 1
         True
+        >>> expr_g = ExprTree('*', [ExprTree('a', []), ExprTree('b', [])])
+        >>> expr_s = ExprTree('+', \
+            [ExprTree('c', []), ExprTree(3, []), ExprTree('a', []), expr_g])
+        >>> lookup2 = {}
+        >>> expr_s.populate_lookup(lookup2)
+        >>> lookup2['b'] == 0
+        True
+        >>> lookup2['c'] == 0
+        True
+        >>> lookup2['a'] == 0
+        True
+        >>> OP_ADD not in lookup2
+        True
+        >>> OP_MULTIPLY not in lookup2
+        True
+        >>> 3 not in lookup2
+        True
         """
+        # TODO turn this into a pytest when the time comes
+        # COULD THERE BE DUPLICATE VARIABLES?
+        # oh right like a + a...ok that's alright it's alright.
+
+        # Root is either none, number or string, subtrees is a list.
+
+        # check if root is a string that is not in the shits
+        if isinstance(self._root, str) and self._root not in OPERATORS:
+            # add if it is
+            lookup[self._root] = 0
+        # run this function on children
+        for child in self._subtrees:
+            child.populate_lookup(lookup)
 
     def append(self, child: ExprTree) -> None:
         """Append child to this ExprTree's list of subtrees.
@@ -264,7 +353,8 @@ class ExprTree:
             i += 1
 
 
-# TODO (Task 4): implement construct_from_list
+# TODO (Task 4): implement construct_from_list[DONE]
+# TODO RUN TESTS. RUN A LOT OF TESTS. RUN A FUCKTON OF TESTS.
 def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     """
     Construct an expression tree from <values>.
@@ -293,6 +383,30 @@ def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     >>> exp_t == ExprTree('+', subtrees)
     True
     """
+    a = Queue()
+    ret_tree = None
+    # we will go thru each shit, if it's an operator we add to queue
+    # either way we append to the first item in queue.
+    # once we reach the end of a list, we pop the thing from the queue
+    for child in values:
+        # add to me!
+        atm = None
+        if not a.is_empty():
+            # it pops off at the beginning, so next iteration we will be on
+            # the next tree to add to. It just works well like that
+            atm = a.dequeue()
+        for orphan in child:
+            tree_to_add = ExprTree(orphan, [])
+            if atm is not None:
+                atm.append(tree_to_add)
+            elif ret_tree is None:
+                # atm is none, aka queue was empty. The only time the queue will
+                # be empty is if there are still children to add and
+                # there is no ret_tree. We'll run a check just in case.
+                ret_tree = tree_to_add
+            if orphan in OPERATORS:
+                a.enqueue(tree_to_add)
+    return ret_tree
 
 
 # Provided visualization code - see an example usage at the bottom
@@ -382,6 +496,7 @@ def _draw_graph(g: nx.Graph,
 
 if __name__ == "__main__":
     import python_ta
+
     python_ta.check_all(config={'pyta-reporter': 'ColorReporter',
                                 'allowed-io': [],
                                 'allowed-import-modules': ['doctest',
