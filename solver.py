@@ -137,6 +137,14 @@ class BfsSolver(Solver):
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
         the solution.
+
+        >>> s = SudokuPuzzle(4, \
+        [["A", "B", "C", "D"], \
+        ["C", "D", " ", " "], \
+        [" ", " ", " ", " "], \
+        [" ", " ", " ", " "]], {"A", "B", "C", "D"})
+        >>> a = BfsSolver()
+        >>> a.solve(s)
         """
         # THIS CODE IS HORRENDOUS WTF
         # I don't think it needs recursion though...? this should be ok
@@ -162,16 +170,17 @@ class BfsSolver(Solver):
             # fail
             if (seen is not None and str(curr) in seen) or curr.fail_fast():
                 # fail, discard this state.
-                # add to seen
-                if str(curr) not in seen:
-                    seen.add(str(curr))
+                # add to seen? I don't think we need to...
+                # if str(curr) not in seen:
+                #     seen.add(str(curr))
                 # delete from dict potentially
+                pass
             elif curr.is_solved():
                 # game is solved, return stuff!
                 # we have to reverse the list later but yeah
                 ret_lst.append(curr)
-                while curr in stated:
-                    curr = stated[curr]
+                while str(curr) in stated:
+                    curr = stated[str(curr)]
                     ret_lst.append(curr)
                 ret_lst.reverse()
                 break
@@ -182,7 +191,7 @@ class BfsSolver(Solver):
                 for puz in curr.extensions():
                     game_q.enqueue(puz)
                     # LOW IQ CODE UPCOMING
-                    stated[puz] = curr
+                    stated[str(puz)] = curr
 
         return ret_lst
         # use the fail_fast and is_solved puzzle methods also extensions
