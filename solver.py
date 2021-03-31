@@ -102,6 +102,8 @@ class DfsSolver(Solver):
         if puzzle.is_solved():
             return [puzzle]
         if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+            if str(puzzle) not in seen:
+                seen.add(str(puzzle))
             return []
         else:
             # we don't want to see this again.
@@ -109,9 +111,12 @@ class DfsSolver(Solver):
             # backwards
             seen.add(str(puzzle))
             for ext in puzzle.extensions():
-                if self.solve(ext):
+                if str(ext) in seen:
+                    continue
+                variable = self.solve(ext, seen)
+                if variable:
                     # list not empty
-                    return [puzzle] + self.solve(ext)
+                    return [puzzle] + variable
             return []
         # scuffed code, run tests
         # you can assert the conditions that everything is in extensions and
