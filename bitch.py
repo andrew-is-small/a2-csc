@@ -4,7 +4,7 @@ Used to test random stuff
 """
 from sudoku_puzzle import SudokuPuzzle
 from solver import BfsSolver
-
+from word_ladder_puzzle import WordLadderPuzzle
 
 # sample usage of BfsSolver
 def bfs_demo():
@@ -22,5 +22,16 @@ def bfs_demo():
         print(i)
         print("########")
 
+def bfs_demo1():
+    a = BfsSolver()
+    b = WordLadderPuzzle("me", "my", {"me", "be", "my"})
+    bongst = a.solve(b)
+    print("The puzzle was: ")
+    print(b)
+    print("The solution is: ")
+    for i in bongst:
+        print(i)
 
-bfs_demo()
+bfs_demo1()
+
+

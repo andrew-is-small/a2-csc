@@ -202,8 +202,8 @@ class WordLadderPuzzle(Puzzle):
 
         IMPOSSIBLE - a solution does not exist
         >>> wl1 = WordLadderPuzzle("me", "my", {"me", "be", "my"})
-        >>> wl1.get_difficulty() == TRIVIAL
-
+        >>> wl1.get_difficulty()
+        'trivial'
         """
         x = BfsSolver()
         y = x.solve(self)
