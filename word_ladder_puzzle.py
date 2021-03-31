@@ -171,8 +171,17 @@ class WordLadderPuzzle(Puzzle):
         True
         """
         newlst = []
-        for i in self.word_set:
-            if self.from_word != i:
+        for i in self.word_set: #i is all possible words to turn into
+            if i != self.from_word: #this checks wether the word i is equal to og
+                bruh = []
+                bruh[:] = i
+                og = []
+                og[:] = self.from_word
+                counter = 0
+            for letter in range(len(bruh)): #checks each letter in possible word i
+                if bruh[letter] != og[letter]:
+                    counter += 1
+            if counter == 1:
                 x = WordLadderPuzzle(i, self.to_word, self.word_set)
                 newlst.append(x)
         return newlst
