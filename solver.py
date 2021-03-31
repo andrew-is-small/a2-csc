@@ -166,7 +166,7 @@ class BfsSolver(Solver):
         # change the while condition
         while not game_q.is_empty():
             curr = game_q.dequeue()
-
+            # print(curr)
             # fail
             if (seen is not None and str(curr) in seen) or curr.fail_fast():
                 # fail, discard this state.
@@ -189,15 +189,16 @@ class BfsSolver(Solver):
             # - Add them to queue
             # - Add them to dict
             else:
-                # we will add it to seen because at this point we already
-                # processed it, shouldn't see it again.
-                # TODO: is this good? who knows?
-                seen.add(str(curr))
                 for puz in curr.extensions():
-                    game_q.enqueue(puz)
-                    # LOW IQ CODE UPCOMING
-                    stated[str(puz)] = curr
-
+                    # TODO check this
+                    if str(puz) not in seen:
+                        game_q.enqueue(puz)
+                        # LOW IQ CODE UPCOMING
+                        stated[str(puz)] = curr
+            # we will add it to seen because at this point we already
+            # processed it, shouldn't see it again.
+            # TODO: is this good? who knows?
+            seen.add(str(curr))
         return ret_lst
         # use the fail_fast and is_solved puzzle methods also extensions
         # THIS CODE MAKES SENSE IN THEORY, BUT WE DEFINITELY GOTTA WRITE TESTS
