@@ -220,10 +220,15 @@ class WordLadderPuzzle(Puzzle):
         x = BfsSolver()
         y = x.solve(self)
         if len(y) <= 2:
+            # start, sol
             return TRIVIAL
         elif len(y) == 3:
+            # start, step1, step2(sol)
             return EASY
+        elif len(y) < 6:
+            return MEDIUM
         elif len(y) >= 6:
+            # start, 1, 2, 3, 4, solved
             return HARD
         else:
             return IMPOSSIBLE

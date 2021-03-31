@@ -126,6 +126,29 @@ class DfsSolver(Solver):
 
 # TODO (Task 2): implement the solve method in the BfsSolver class.
 # Hint: You may find a Queue useful here.
+def _get_parent_puz(dik: dict, puz_to: Puzzle) -> Optional[Puzzle]:
+    # print("getting parent puz for", puz_to)
+    for key in dik:
+        for puz in dik[key][1]:
+            if puz_to is puz:
+                return dik[key][0]
+            else:
+                # print(puz_to, "is not", puz)
+                pass
+    # print("returning none for", puz_to)
+    return None
+
+
+def _add_to_dict(dik: dict, puz_from: Puzzle, puz_to: Puzzle) -> None:
+    # print("adding to dict f/t", puz_from, puz_to)
+    # ok so dict will have str(parent): parent, list of puzzles
+    if str(puz_from) not in dik:
+        dik[str(puz_from)] = [puz_from, [puz_to]]
+    else:
+        # str of puz_from is in dik
+        dik[str(puz_from)][1].append(puz_to)
+
+
 class BfsSolver(Solver):
     """"
     A solver for full-information puzzles that uses
@@ -161,7 +184,7 @@ class BfsSolver(Solver):
         game_q.enqueue(puzzle)
         seen = set()
         # ####################################################
-        # ok so dict will have puzzle: parent
+        # ok so dict will have parent: puzzles
         # this is gonna take up so much memory but please don't worry ok...
         stated = {}
         # maybe implement a dictionary that stores the thing with a numerical
@@ -173,33 +196,40 @@ class BfsSolver(Solver):
             curr = game_q.dequeue()
             # print(curr)
             # fail
+            # This one uses continue
             if (seen is not None and str(curr) in seen) or curr.fail_fast():
                 # fail, discard this state.
-                # add to seen? I don't think we need to...
+                # add to seen?
                 # TODO may delete this in the future check with stuff...
                 if str(curr) not in seen:
                     seen.add(str(curr))
                 # delete from dict potentially
-                pass
+                continue
+            # this one uses break
             elif curr.is_solved():
                 # game is solved, return stuff!
                 # we have to reverse the list later but yeah
                 ret_lst.append(curr)
-                while str(curr) in stated:
-                    curr = stated[str(curr)]
-                    ret_lst.append(curr)
+                a = _get_parent_puz(stated, curr)
+                while a is not puzzle:
+                    ret_lst.append(a)
+                    a = _get_parent_puz(stated, a)
+                ret_lst.append(a)
                 ret_lst.reverse()
                 break
             # get extensions
             # - Add them to queue
             # - Add them to dict
-            else:
-                for puz in curr.extensions():
-                    # TODO check this
-                    if str(puz) not in seen:
-                        game_q.enqueue(puz)
-                        # LOW IQ CODE UPCOMING
-                        stated[str(puz)] = curr
+            # so this is essentially the else block but it's not in an else
+            # block so pyTA won't complain. I am so cool.
+            for puz in curr.extensions():
+                # TODO check this
+                if str(puz) not in seen:
+                    game_q.enqueue(puz)
+                    # LOW IQ CODE UPCOMING
+                    _add_to_dict(stated, curr, puz)
+                    # TODO IMPLEMENT DIFFERENT WAY OF FINDING QUICKEST SOL
+                    # THE DICTIONARY GETS OVERWROTE A LOT
             # we will add it to seen because at this point we already
             # processed it, shouldn't see it again.
             # TODO: is this good? who knows?
