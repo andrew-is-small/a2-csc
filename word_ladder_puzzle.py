@@ -23,6 +23,7 @@ This module contains the word ladder puzzle class.
 from __future__ import annotations
 from typing import Optional, Set, List
 from puzzle import Puzzle
+from solver import BfsSolver
 
 
 # difficulty constants
@@ -105,6 +106,14 @@ class WordLadderPuzzle(Puzzle):
         >>> wl1 == wl3
         True
         """
+        lst = []
+        if self.from_word == other.from_word:
+            lst.append(1)
+        if self.to_word == other.to_word:
+            lst.append(1)
+        if self.word_set == other.word_set:
+            lst.append(1)
+        return lst == [1, 1, 1]
 
     # TODO (Task 3): override __str__
     def __str__(self) -> str:
@@ -121,6 +130,8 @@ class WordLadderPuzzle(Puzzle):
         >>> print(wl2)
         me -> my
         """
+        strong = str(self.from_word) + ' -> ' + str(self.to_word)
+        return strong
 
     # TODO (Task 3): override is_solved
     # Note: A WordLadderPuzzle is solved when from_word is the same as its
@@ -136,6 +147,7 @@ class WordLadderPuzzle(Puzzle):
         >>> wl2.is_solved()
         False
         """
+        return self.from_word == self.to_word
 
     # TODO (Task 3): override extensions
     # legal extensions are valid WordLadderPuzzles that have a from_word that
@@ -158,6 +170,12 @@ class WordLadderPuzzle(Puzzle):
         >>> len(wl1_extensions) == 2
         True
         """
+        newlst = []
+        for i in self.word_set:
+            if self.from_word != i:
+                x = WordLadderPuzzle(i, self.to_word, self.word_set)
+                newlst.append(x)
+        return newlst
 
     # TODO (Task 3): implement get_difficulty
     # Note: implementing this requires you to have completed Task 2
@@ -183,7 +201,20 @@ class WordLadderPuzzle(Puzzle):
         HARD - a solution exists and it takes at least 5 moves to reach.
 
         IMPOSSIBLE - a solution does not exist
+        >>> wl1 = WordLadderPuzzle("me", "my", {"me", "be", "my"})
+        >>> wl1.get_difficulty()
+        'trivial'
         """
+        x = BfsSolver()
+        y = x.solve(self)
+        if len(y) <= 2:
+            return TRIVIAL
+        elif len(y) == 3:
+            return EASY
+        elif len(y) >= 6:
+            return HARD
+        else:
+            return IMPOSSIBLE
 
 
 if __name__ == '__main__':
