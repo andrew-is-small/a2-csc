@@ -6,6 +6,7 @@ from sudoku_puzzle import SudokuPuzzle
 from solver import BfsSolver
 from word_ladder_puzzle import WordLadderPuzzle
 
+
 # sample usage of BfsSolver
 def bfs_demo():
     a = BfsSolver()
@@ -22,7 +23,8 @@ def bfs_demo():
         print(i)
         print("########")
 
-def bfs_demo1():
+
+def wl_bfs_demo1():
     a = BfsSolver()
     b = WordLadderPuzzle("me", "my", {"me", "be", "my"})
     bongst = a.solve(b)
@@ -32,6 +34,18 @@ def bfs_demo1():
     for i in bongst:
         print(i)
 
-bfs_demo1()
+
+def wl_bfs_demo2():
+    a = BfsSolver()
+    b = WordLadderPuzzle("cost", "save",
+                         {"cost", "cast", "case", "cave", "save", "cyst"})
+    # cost cast case cave save btw
+    bongst = a.solve(b)
+    print("The puzzle was: ")
+    print(b)
+    print("The solution is: ")
+    for i in bongst:
+        print(i)
 
 
+wl_bfs_demo2()

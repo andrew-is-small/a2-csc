@@ -137,14 +137,6 @@ class BfsSolver(Solver):
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
         the solution.
-
-        >>> s = SudokuPuzzle(4, \
-        [["A", "B", "C", "D"], \
-        ["C", "D", " ", " "], \
-        [" ", " ", " ", " "], \
-        [" ", " ", " ", " "]], {"A", "B", "C", "D"})
-        >>> a = BfsSolver()
-        >>> a.solve(s)
         """
         # THIS CODE IS HORRENDOUS WTF
         # I don't think it needs recursion though...? this should be ok
