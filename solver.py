@@ -137,6 +137,14 @@ class BfsSolver(Solver):
         <seen> is either None (default) or a set of puzzle states' string
         representations, whose puzzle states can't be any part of the path to
         the solution.
+
+        >>> s = SudokuPuzzle(4, \
+        [["A", "B", "C", "D"], \
+        ["C", "D", " ", " "], \
+        [" ", " ", " ", " "], \
+        [" ", " ", " ", " "]], {"A", "B", "C", "D"})
+        >>> a = BfsSolver()
+        >>> a.solve(s)
         """
         # THIS CODE IS HORRENDOUS WTF
         # I don't think it needs recursion though...? this should be ok
@@ -171,7 +179,7 @@ class BfsSolver(Solver):
                 # game is solved, return stuff!
                 # we have to reverse the list later but yeah
                 ret_lst.append(curr)
-                while curr in stated:
+                while str(curr) in stated:
                     curr = stated[str(curr)]
                     ret_lst.append(curr)
                 ret_lst.reverse()
