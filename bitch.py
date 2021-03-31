@@ -48,4 +48,4 @@ def wl_bfs_demo2():
         print(i)
 
 
-wl_bfs_demo2()
+bfs_demo()

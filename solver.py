@@ -66,6 +66,7 @@ class Solver:
 
 # TODO (Task 2): implement the solve method in the DfsSolver class.
 # TODO TEST BITCH2
+# TODO seen is not none may not be necessary cuz we initialize seen everytime
 # Your solve method MUST be a recursive function (i.e. it must make
 # at least one recursive call to itself)
 # You may NOT change the interface to the solve method.
@@ -94,12 +95,19 @@ class DfsSolver(Solver):
         representations, whose puzzle states can't be any part of the path to
         the solution.
         """
+        # initialize seen if it's not there
+        if seen is None:
+            seen = set()
         # base cases
         if puzzle.is_solved():
             return [puzzle]
         if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
             return []
         else:
+            # we don't want to see this again.
+            # this only applies for word ladder so far...we don't wanna go
+            # backwards
+            seen.add(str(puzzle))
             for ext in puzzle.extensions():
                 if self.solve(ext):
                     # list not empty
@@ -163,8 +171,9 @@ class BfsSolver(Solver):
             if (seen is not None and str(curr) in seen) or curr.fail_fast():
                 # fail, discard this state.
                 # add to seen? I don't think we need to...
-                # if str(curr) not in seen:
-                #     seen.add(str(curr))
+                # TODO may delete this in the future check with stuff...
+                if str(curr) not in seen:
+                    seen.add(str(curr))
                 # delete from dict potentially
                 pass
             elif curr.is_solved():
@@ -180,6 +189,10 @@ class BfsSolver(Solver):
             # - Add them to queue
             # - Add them to dict
             else:
+                # we will add it to seen because at this point we already
+                # processed it, shouldn't see it again.
+                # TODO: is this good? who knows?
+                seen.add(str(curr))
                 for puz in curr.extensions():
                     game_q.enqueue(puz)
                     # LOW IQ CODE UPCOMING
