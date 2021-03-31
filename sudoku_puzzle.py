@@ -374,6 +374,16 @@ class SudokuPuzzle(Puzzle):
 
         Hint: You should find the optional parameter, seen, for the Solver
         class' solve method very useful here.
+
+        >>> s = SudokuPuzzle(4, \
+        [["B", "D", "A", "C"], \
+        ["C", "A", "B", "D"], \
+        ["A", "B", " ", " "], \
+        [" ", " ", " ", " "]], {"A", "B", "C", "D"})
+        >>> s.fail_fast()
+        True
+        >>> s.has_unique_solution()
+        False
         """
         counter = 0
         a = DfsSolver()
