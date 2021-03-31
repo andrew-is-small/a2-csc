@@ -23,7 +23,7 @@ This module contains the word ladder puzzle class.
 from __future__ import annotations
 from typing import Optional, Set, List
 from puzzle import Puzzle
-from solver import DfsSolver, BfsSolver
+from solver import BfsSolver
 
 
 # difficulty constants
@@ -152,7 +152,6 @@ class WordLadderPuzzle(Puzzle):
     # TODO (Task 3): override extensions
     # legal extensions are valid WordLadderPuzzles that have a from_word that
     # differs from this WordLadderPuzzle's from_word by exactly one character
-    # TODO aka word_set
     def extensions(self) -> List[WordLadderPuzzle]:
         """
         Return a list of WordLadderPuzzles that are one step
@@ -202,8 +201,20 @@ class WordLadderPuzzle(Puzzle):
         HARD - a solution exists and it takes at least 5 moves to reach.
 
         IMPOSSIBLE - a solution does not exist
+        >>> wl1 = WordLadderPuzzle("me", "my", {"me", "be", "my"})
+        >>> wl1.get_difficulty() == TRIVIAL
+
         """
-        x = self.solve()
+        x = BfsSolver()
+        y = x.solve(self)
+        if len(y) <= 2:
+            return TRIVIAL
+        elif len(y) == 3:
+            return EASY
+        elif len(y) >= 6:
+            return HARD
+        else:
+            return IMPOSSIBLE
 
 
 if __name__ == '__main__':
