@@ -5,6 +5,8 @@ Used to test random stuff
 from sudoku_puzzle import SudokuPuzzle
 from solver import BfsSolver, DfsSolver
 from word_ladder_puzzle import WordLadderPuzzle
+from expression_tree_puzzle import ExpressionTreePuzzle
+from expression_tree import ExprTree
 
 
 # sample usage of BfsSolver
@@ -89,7 +91,48 @@ def wl_get_diff():
     print(b.get_difficulty())
 
 
-wl_get_diff()
+def mutate_test_exp_tree():
+    exp_t2 = ExprTree('+', [ExprTree('a', []), ExprTree(1, [])])
+    puz2 = ExpressionTreePuzzle(exp_t2, 8)
+    exts_of_puz2 = puz2.extensions()
+    print(puz2)
+    print(exts_of_puz2[0])
+    print("########")
+    exts_of_puz2[0]._tree.substitute({'a': 69})
+    exts_of_puz2[0].variables['a'] = 69
+    # LOL I LOVE HOW ITS LIKE pwease don't access a pwivate variable uwu
+    print(exts_of_puz2[0])
+    print(puz2)
+    # ok I think the .copy method worked? not sure tho
+
+
+def exp_tree_puzzle_both_solvers():
+    exp_t = ExprTree('+', [ExprTree('a', []), ExprTree('b', [])])
+    nong_t = ExprTree('*', [exp_t, ExprTree(3, [])])
+    puz = ExpressionTreePuzzle(nong_t, 33)
+    print(puz.fail_fast())
+    dfs = DfsSolver()
+    bongst = dfs.solve(puz)
+    print("The puzzle was: ")
+    print(puz)
+    print("The solution is: ")
+    for i in bongst:
+        print(i)
+
+
+def exp_tree_not_solvable():
+    exp_t = ExprTree('*', [ExprTree('a', []), ExprTree(3, [])])
+    puz = ExpressionTreePuzzle(exp_t, 5)
+    dfs = BfsSolver()
+    bongst = dfs.solve(puz)
+    print("The puzzle was: ")
+    print(puz)
+    print("The solution is: ")
+    for i in bongst:
+        print(i)
+
+
+exp_tree_not_solvable()
 # TODO BFS DOESN'T GIVE SHORTEST SOLUTION??
 # TODO DFS DOESN'T EITHER LOL OH WAIT ITS ALBERTS FAULT AHHHHH
 # implement the checker method which basically takes every gamestate in a

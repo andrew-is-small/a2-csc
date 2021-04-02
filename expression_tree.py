@@ -249,7 +249,6 @@ class ExprTree:
             # run this on each subtree
             for child in self._subtrees:
                 child.substitute(from_to)
-            pass
 
     # TODO (Task 4): implement populate_lookup[DONE]
     def populate_lookup(self, lookup: Dict[str, int]) -> None:

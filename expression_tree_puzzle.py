@@ -68,7 +68,7 @@ class ExpressionTreePuzzle(Puzzle):
         self._tree = tree
         self.target = target
 
-    # TODO (Task 5) override is_solved
+    # TODO (Task 5) override is_solved[DONE]
     def is_solved(self) -> bool:
         """
         Return True iff ExpressionTreePuzzle self is solved.
@@ -88,8 +88,12 @@ class ExpressionTreePuzzle(Puzzle):
         >>> puz.is_solved()
         True
         """
+        for a in self.variables:
+            if self.variables[a] == 0:
+                return False
+        return self._tree.eval(self.variables) == self.target
 
-    # TODO (Task 5) override __str__
+    # TODO (Task 5) override __str__[DONE]
     def __str__(self) -> str:
         """
         Return a string representation of this ExpressionTreePuzzle.
@@ -110,8 +114,11 @@ class ExpressionTreePuzzle(Puzzle):
         {'a': 0, 'b': 0}
         ((a * (b + 6 + 6)) + 5) = 61
         """
+        a = str(self.variables) + '\n' + str(self._tree) + \
+            ' = ' + str(self.target)
+        return a
 
-    # TODO (Task 5) override extensions
+    # TODO (Task 5) override extensions[DONE]
     def extensions(self) -> List[ExpressionTreePuzzle]:
         """
         Return the list of legal extensions of this ExpressionTreePuzzle.
@@ -139,8 +146,21 @@ class ExpressionTreePuzzle(Puzzle):
         >>> len(exts_of_puz) == 18
         True
         """
+        lst = []
+        # look thru dict for first variable that is 0
+        for a in self.variables:
+            if self.variables[a] == 0:
+                for i in range(1, 10):
+                    # goes 1-9
+                    new_d = self.variables.copy()
+                    new_d[a] = i
+                    new_t = self._tree.copy()
+                    cong = ExpressionTreePuzzle(new_t, self.target)
+                    cong.variables = new_d
+                    lst.append(cong)
+        return lst
 
-    # TODO (TASK 5): override fail_fast
+    # TODO (TASK 5): override fail_fast[DONE???]
     # The specifics of how you implement this are up to you.
     # Hint 1: remember that a puzzle can only be extended by assigning a value
     #         to an unassigned variable.
@@ -152,6 +172,28 @@ class ExpressionTreePuzzle(Puzzle):
         have no solution, False otherwise.
 
         """
+        # so if we assign 1 to all unassigned variables and it is
+        # still > target, then fuck man
+        # also if we assign 9 to all unassigned variables and it is
+        # still < target, then fuck man
+        # ok yeah it's just supposed to return true if it can be QUICKLY
+        # determined, so we'll go with this method
+        tr_copy = self._tree.copy()
+        vars_copy = self.variables.copy()
+        for a in vars_copy:
+            vars_copy[a] = 1
+        if tr_copy.eval(vars_copy) > self.target:
+            return True
+        for a in vars_copy:
+            vars_copy[a] = 9
+        if tr_copy.eval(vars_copy) < self.target:
+            return True
+        return False
+        # bad code...
+        # for a in self.extensions():
+        #     if a.eval() == self.target:
+        #         return True
+        # return False
 
 
 if __name__ == "__main__":
