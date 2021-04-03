@@ -181,12 +181,17 @@ class ExpressionTreePuzzle(Puzzle):
         tr_copy = self._tree.copy()
         vars_copy = self.variables.copy()
         for a in vars_copy:
-            vars_copy[a] = 1
+            if vars_copy[a] == 0:
+                # ??? is this enough to do stuff or...
+                vars_copy[a] = 1
         if tr_copy.eval(vars_copy) > self.target:
             return True
-        for a in vars_copy:
-            vars_copy[a] = 9
-        if tr_copy.eval(vars_copy) < self.target:
+
+        vars_copy2 = self.variables.copy()
+        for a in vars_copy2:
+            if vars_copy2[a] == 0:
+                vars_copy2[a] = 9
+        if tr_copy.eval(vars_copy2) < self.target:
             return True
         return False
         # bad code...

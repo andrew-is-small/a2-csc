@@ -319,3 +319,4 @@ def test_expression_tree_puzzle_fail_fast_false() -> None:
 if __name__ == '__main__':
     import pytest
     pytest.main(['a2_starter_tests.py'])
+

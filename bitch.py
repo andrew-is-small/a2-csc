@@ -132,7 +132,12 @@ def exp_tree_not_solvable():
         print(i)
 
 
-exp_tree_not_solvable()
+def exp_tree_ex():
+    puz = WordLadderPuzzle("done", "done", {"done"})
+    print(puz.get_difficulty())
+
+
+exp_tree_ex()
 # TODO BFS DOESN'T GIVE SHORTEST SOLUTION??
 # TODO DFS DOESN'T EITHER LOL OH WAIT ITS ALBERTS FAULT AHHHHH
 # implement the checker method which basically takes every gamestate in a

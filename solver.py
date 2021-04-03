@@ -211,10 +211,11 @@ class BfsSolver(Solver):
                 # we have to reverse the list later but yeah
                 ret_lst.append(curr)
                 a = _get_parent_puz(stated, curr)
-                while a is not puzzle:
+                while a is not puzzle and a is not None:
                     ret_lst.append(a)
                     a = _get_parent_puz(stated, a)
-                ret_lst.append(a)
+                if a is not None:
+                    ret_lst.append(a)
                 ret_lst.reverse()
                 break
             # get extensions
