@@ -149,6 +149,7 @@ class WordLadderPuzzle(Puzzle):
         return self.from_word == self.to_word
 
     # TODO (Task 3): override extensions
+    # TODO TEST THAT EXTENSIONS CONTAINS EVERYTHING WE NEED IN THE RIGHT ORDER
     # legal extensions are valid WordLadderPuzzles that have a from_word that
     # differs from this WordLadderPuzzle's from_word by exactly one character
     def extensions(self) -> List[WordLadderPuzzle]:
@@ -171,9 +172,10 @@ class WordLadderPuzzle(Puzzle):
         """
         newlst = []
         for i in self.word_set:  # i is all possible words to turn into
-            # to og
+            # splits word to letters
             bruh = []
             bruh[:] = i
+            # splits from word to letters
             og = []
             og[:] = self.from_word
             counter = 0
@@ -187,7 +189,26 @@ class WordLadderPuzzle(Puzzle):
                 x = WordLadderPuzzle(i, self.to_word, self.word_set)
                 newlst.append(x)
 
-        return newlst
+        # sort list
+        # this is going to return ascending order of the word score
+        # so words with least differences as to_word come first
+        return sorted(newlst, key=self._word_score)
+        # return newlst
+
+    # TODO TEST THIS
+    def _word_score(self, puz: WordLadderPuzzle) -> int:
+        """Returns the number of differences between the from word of a puzzle
+        and the to_word of this puzzle.
+        """
+        counter = 0
+        word = puz.from_word
+        word_to = self.to_word
+        # from word is different, to word is the same right...?
+        for i in range(len(word_to)):
+            # to word and word are same length
+            if word[i] != word_to[i]:
+                counter += 1
+        return counter
 
     # TODO (Task 3): implement get_difficulty
     # Note: implementing this requires you to have completed Task 2
@@ -219,7 +240,9 @@ class WordLadderPuzzle(Puzzle):
         """
         x = BfsSolver()
         y = x.solve(self)
-        if len(y) <= 2:
+        if len(y) == 0:
+            return IMPOSSIBLE
+        elif len(y) <= 2:
             # start, sol
             return TRIVIAL
         elif len(y) == 3:
@@ -230,8 +253,6 @@ class WordLadderPuzzle(Puzzle):
         elif len(y) >= 6:
             # start, 1, 2, 3, 4, solved
             return HARD
-        else:
-            return IMPOSSIBLE
 
 
 if __name__ == '__main__':

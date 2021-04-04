@@ -137,7 +137,32 @@ def exp_tree_ex():
     print(puz.get_difficulty())
 
 
-exp_tree_ex()
+def wl_extensions():
+    b = WordLadderPuzzle("cost", "case",
+                         {"cost", "cast", "yost", "cose",
+                          "case", "cyst", "colt"})
+    # yost doesn't get you closer
+    # cast gets u 1 closer
+    # cose gets u 1 closer
+    # cyst doesn't get you any closer
+    # colt gets you further
+    # so it should go (cast/cose), (cyst/yost), colt
+    for i in b.extensions():
+        print(i)
+
+
+def wl_extensions_update_dfs_demo():
+    puz = WordLadderPuzzle("same", "cost")
+    dfs = DfsSolver()
+    bongst = dfs.solve(puz)
+    print("The puzzle was: ")
+    print(puz)
+    print("The solution is: ")
+    for i in bongst:
+        print(i)
+
+
+wl_extensions_update_dfs_demo()
 # TODO BFS DOESN'T GIVE SHORTEST SOLUTION??
 # TODO DFS DOESN'T EITHER LOL OH WAIT ITS ALBERTS FAULT AHHHHH
 # implement the checker method which basically takes every gamestate in a

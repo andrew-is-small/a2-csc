@@ -96,12 +96,13 @@ class DfsSolver(Solver):
         the solution.
         """
         # initialize seen if it's not there
+        # print(puzzle)
         if seen is None:
             seen = set()
         # base cases
         if puzzle.is_solved():
             return [puzzle]
-        if puzzle.fail_fast() or (seen is not None and str(puzzle) in seen):
+        if puzzle.fail_fast() or str(puzzle) in seen:
             if str(puzzle) not in seen:
                 seen.add(str(puzzle))
             return []
@@ -109,6 +110,8 @@ class DfsSolver(Solver):
             # we don't want to see this again.
             # this only applies for word ladder so far...we don't wanna go
             # backwards
+            # THIS MAY REACH MAXIMUM RECURSION DEPTH UNINTENTIONALLY
+            # we have to sort puzzle extensions in word ladder puzzle xd
             seen.add(str(puzzle))
             for ext in puzzle.extensions():
                 if str(ext) in seen:
@@ -127,6 +130,12 @@ class DfsSolver(Solver):
 # TODO (Task 2): implement the solve method in the BfsSolver class.
 # Hint: You may find a Queue useful here.
 def _get_parent_puz(dik: dict, puz_to: Puzzle) -> Optional[Puzzle]:
+    """
+    Gets the previous state of a puzzle.
+
+    Precondition: the dictionary is formatted as
+    str(puz_from), [puz_from, puz_to]
+    """
     # print("getting parent puz for", puz_to)
     for key in dik:
         for puz in dik[key][1]:
@@ -140,6 +149,12 @@ def _get_parent_puz(dik: dict, puz_to: Puzzle) -> Optional[Puzzle]:
 
 
 def _add_to_dict(dik: dict, puz_from: Puzzle, puz_to: Puzzle) -> None:
+    """
+    Adds a puzzle to a dictionary.
+
+    Precondition: the format of the dictionary is
+    str(puz_from), [puz_from, puz_to]
+    """
     # print("adding to dict f/t", puz_from, puz_to)
     # ok so dict will have str(parent): parent, list of puzzles
     if str(puz_from) not in dik:
