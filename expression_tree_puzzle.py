@@ -68,7 +68,7 @@ class ExpressionTreePuzzle(Puzzle):
         self._tree = tree
         self.target = target
 
-    # TODO (Task 5) override is_solved[DONE]
+    # (Task 5) override is_solved[DONE]
     def is_solved(self) -> bool:
         """
         Return True iff ExpressionTreePuzzle self is solved.
@@ -93,7 +93,7 @@ class ExpressionTreePuzzle(Puzzle):
                 return False
         return self._tree.eval(self.variables) == self.target
 
-    # TODO (Task 5) override __str__[DONE]
+    # (Task 5) override __str__[DONE]
     def __str__(self) -> str:
         """
         Return a string representation of this ExpressionTreePuzzle.
@@ -118,7 +118,7 @@ class ExpressionTreePuzzle(Puzzle):
             ' = ' + str(self.target)
         return a
 
-    # TODO (Task 5) override extensions[DONE]
+    # (Task 5) override extensions[DONE]
     def extensions(self) -> List[ExpressionTreePuzzle]:
         """
         Return the list of legal extensions of this ExpressionTreePuzzle.
@@ -160,7 +160,7 @@ class ExpressionTreePuzzle(Puzzle):
                     lst.append(cong)
         return lst
 
-    # TODO (TASK 5): override fail_fast[DONE???]
+    # (TASK 5): override fail_fast[DONE???]
     # The specifics of how you implement this are up to you.
     # Hint 1: remember that a puzzle can only be extended by assigning a value
     #         to an unassigned variable.
@@ -194,11 +194,6 @@ class ExpressionTreePuzzle(Puzzle):
         if tr_copy.eval(vars_copy2) < self.target:
             return True
         return False
-        # bad code...
-        # for a in self.extensions():
-        #     if a.eval() == self.target:
-        #         return True
-        # return False
 
 
 if __name__ == "__main__":

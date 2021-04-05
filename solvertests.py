@@ -110,12 +110,80 @@ def test_one_move():
         assert i[-1].is_solved()
 
 
+# #### WORD LADDER PUZZLE
+def test_sols_or_smth():
+    a = WordLadderPuzzle('stair', 'cased')
+    sol = [DfsSolver(), BfsSolver()]
+    lst = []
+    print("solving")
+    for solver in sol:
+        lips = solver.solve(a)
+        lst.append(lips)
+        print("solved one time, length =", len(lips))
+        print("solved by", solver)
+    # wanna make sure list length is either 0
+    for solution in lst:
+        if len(solution) == 0:
+            continue
+        for i in range(len(solution)):
+            print(solution[i])
+            if i > 0:
+                assert solution[i] in solution[i - 1].extensions()
+        print("############")
+        assert solution[-1].is_solved()
+        assert solution[0] == a
+
+
+# #### EXPRESSION TREE
+# TODO test construct from list
+def test_construct_from_list():
+    c = construct_from_list([['+'], ['a', 3, '*', '+'], ['b', 'c'], ['d', 1]])
+    mult_tree = ExprTree('*', [ExprTree('b', []), ExprTree('c', [])])
+    plus_tree = ExprTree('+', [ExprTree('d', []), ExprTree(1, [])])
+    mein = ExprTree('+',
+                    [ExprTree('a', []), ExprTree(3, []), mult_tree, plus_tree])
+    assert c == mein
+
+
+# #### SUDOKU
+def test_already_solved_sudoku():
+    s4 = SudokuPuzzle(4,
+                      [["B", "D", "A", "C"],
+                       ["C", "A", "B", "D"],
+                       ["A", "C", "D", "B"],
+                       ["D", "B", "C", "A"]], {"A", "B", "C", "D"})
+    lst = [BfsSolver(), DfsSolver()]
+    for solver in lst:
+        solution = solver.solve(s4)
+        assert solution[-1].is_solved()
+        assert solution[0] == s4
+    print("testing the hard one")
+    # fixed bug where dfssolver tests if puzzle is solved before puzzle in seen
+    assert s4.is_solved()
+    assert s4.has_unique_solution()
+
+
+# test no solution, badly placed thingies
+def test_no_sol_sudoku():
+    s3 = SudokuPuzzle(4,
+                      [["B", "D", "A", "C"],
+                       ["C", "A", "B", "D"],
+                       ["A", "B", " ", "B"],
+                       ["D", "C", " ", " "]], {"A", "B", "C", "D"})
+    assert not s3.has_unique_solution()
+    s3 = SudokuPuzzle(4,
+                      [["C", "C", "A", "C"],
+                       ["C", "A", "C", "D"],
+                       ["C", "C", " ", "B"],
+                       ["D", "C", " ", " "]], {"A", "B", "C", "D"})
+    assert not s3.has_unique_solution()
+
+
 def tezt():
     import pytest
     pytest.main(['solvertests.py'])
 
 
-# TODO TEST THAT EXTENSIONS CONTAINS EVERYTHING WE NEED IN THE RIGHT ORDER
 # (for wordladderpuzzle cuz i implemented a new function yea)
 # test_basic_sudoku()
 # test_wl()
@@ -123,3 +191,5 @@ def tezt():
 # test_no_solution_wl()
 # test_wl_extensions()
 # test_one_move()
+# test_already_solved_sudoku()
+test_construct_from_list()

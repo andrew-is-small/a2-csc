@@ -263,7 +263,7 @@ class SudokuPuzzle(Puzzle):
             return_lst.append(new_puzzle)
         return return_lst
 
-    # TODO[DONE] (Task 1): override fail_fast
+    # [DONE] (Task 1): override fail_fast
     # If there is an open position with no symbols available
     # (i.e. all symbols are already used in the same row, column, or subsquare),
     # then the sudoku puzzle is not solvable.
@@ -297,7 +297,7 @@ class SudokuPuzzle(Puzzle):
         >>> s.fail_fast()
         True
         """
-        # TODO Write pytests for this
+        # Write pytests for this
         # let's try analyzing each position as we get it
         # so we're gonna go through each row of the puzzle and for each
         # blank thing, we'll check if the allowable symbols is []
@@ -361,7 +361,7 @@ class SudokuPuzzle(Puzzle):
                 subsquare_symbols.append(self._grid[ul_row + i][ul_col + j])
         return set(subsquare_symbols)
 
-    # TODO (Task 2): implement has_unique_solution
+    # (Task 2): implement has_unique_solution
     # Implement this method according to its docstring
     # You may import any modules that you need when implementing this method.
     def has_unique_solution(self) -> bool:
@@ -384,6 +384,32 @@ class SudokuPuzzle(Puzzle):
         True
         >>> s.has_unique_solution()
         False
+        >>> s2 = SudokuPuzzle(4, \
+        [["B", "D", "A", "C"], \
+        ["C", "A", "B", "D"], \
+        ["A", "C", " ", "B"], \
+        ["D", "B", " ", "A"]], {"A", "B", "C", "D"})
+        >>> s2.has_unique_solution()
+        True
+        >>> # No solution
+        >>> s3 = SudokuPuzzle(4, \
+        [["B", "D", "A", "C"], \
+        ["C", "A", "B", "D"], \
+        ["A", "B", " ", "B"], \
+        ["D", "C", " ", " "]], {"A", "B", "C", "D"})
+        >>> s3.fail_fast()
+        True
+        >>> s3.has_unique_solution()
+        False
+        >>> s4 = SudokuPuzzle(4, \
+        [["B", "D", "A", "C"], \
+        ["C", "A", "B", "D"], \
+        ["A", "C", "D", "B"], \
+        ["D", "B", "C", "A"]], {"A", "B", "C", "D"})
+        >>> s4.fail_fast()
+        False
+        >>> s4.has_unique_solution()
+        True
         """
         counter = 0
         a = DfsSolver()
@@ -398,10 +424,7 @@ class SudokuPuzzle(Puzzle):
             curr = a.solve(self, seen=seen)
 
         # we know there's no more sols now
-        if counter == 1:
-            return True
-        else:
-            return False
+        return counter == 1
         # this works if puzzle is solved, and it works if there's 0 sols.
 
 

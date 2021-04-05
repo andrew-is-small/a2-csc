@@ -96,7 +96,7 @@ class ExprTree:
         """
         return self._root is None
 
-    # TODO (Task 4): implement eval[DONE]
+    # (Task 4): implement eval[DONE]
     def eval(self, lookup: Dict[str, int]) -> int:
         """
         Evaluate this expression tree and return the result.
@@ -126,14 +126,15 @@ class ExprTree:
                 return self._root
             # it's a variable, has to be in lookup cuz precondition
             return lookup[self._root]
-        if self._root == OP_ADD:
+        elif self._root == OP_ADD:
             # eval all subtrees and apply operator
             # cuz ur adding...DUDE ITS MAT224 BRO ITS THE ADDITIVE IDENTITY
             a = 0
             for child in self._subtrees:
                 a += child.eval(lookup)
             return a
-        if self._root == OP_MULTIPLY:
+        else:
+            # self._root = OP_MULTIPLY
             # eval all subtrees and apply operator
             # DUDE ITS THE MULTIPLICATIVE IDENTITY!!! WOW!!!!!!!!!!!!
             b = 1
@@ -141,7 +142,7 @@ class ExprTree:
                 b *= child.eval(lookup)
             return b
 
-    # TODO (Task 4): implement __str__[DONE]
+    # (Task 4): implement __str__[DONE]
     def __str__(self) -> str:
         """
         Return a string representation of this expression tree
@@ -190,7 +191,7 @@ class ExprTree:
             strung += ')'
             return strung
 
-    # TODO (Task 4): implement __eq__[DONE]
+    # (Task 4): implement __eq__[DONE]
     def __eq__(self, other: ExprTree) -> bool:
         """
         Return whether this ExprTree is equivalent to <other>.
@@ -218,7 +219,7 @@ class ExprTree:
                     return False
             return True
 
-    # TODO (Task 4): implement substitute[DONE]
+    # (Task 4): implement substitute[DONE]
     def substitute(self, from_to: Dict[Union[str, int],
                                        Union[str, int]]) -> None:
         """
@@ -250,7 +251,7 @@ class ExprTree:
             for child in self._subtrees:
                 child.substitute(from_to)
 
-    # TODO (Task 4): implement populate_lookup[DONE]
+    # (Task 4): implement populate_lookup[DONE]
     def populate_lookup(self, lookup: Dict[str, int]) -> None:
         """
         Add entries to <lookup> so it contains a key for all variables
@@ -282,7 +283,7 @@ class ExprTree:
         >>> 3 not in lookup2
         True
         """
-        # TODO turn this into a pytest when the time comes
+        # turn this into a pytest when the time comes
         # COULD THERE BE DUPLICATE VARIABLES?
         # oh right like a + a...ok that's alright it's alright.
 
@@ -352,8 +353,8 @@ class ExprTree:
             i += 1
 
 
-# TODO (Task 4): implement construct_from_list[DONE]
-# TODO RUN TESTS. RUN A LOT OF TESTS. RUN A FUCKTON OF TESTS.
+# (Task 4): implement construct_from_list[DONE]
+# RUN TESTS. RUN A LOT OF TESTS. RUN A FUCKTON OF TESTS.
 def construct_from_list(values: List[List[Union[str, int]]]) -> ExprTree:
     """
     Construct an expression tree from <values>.

@@ -64,9 +64,9 @@ class Solver:
         raise NotImplementedError
 
 
-# TODO (Task 2): implement the solve method in the DfsSolver class.
-# TODO TEST BITCH2
-# TODO seen is not none may not be necessary cuz we initialize seen everytime
+# (Task 2): implement the solve method in the DfsSolver class.
+# TEST BITCH2
+# seen is not none may not be necessary cuz we initialize seen everytime
 # Your solve method MUST be a recursive function (i.e. it must make
 # at least one recursive call to itself)
 # You may NOT change the interface to the solve method.
@@ -100,12 +100,12 @@ class DfsSolver(Solver):
         if seen is None:
             seen = set()
         # base cases
-        if puzzle.is_solved():
-            return [puzzle]
         if puzzle.fail_fast() or str(puzzle) in seen:
             if str(puzzle) not in seen:
                 seen.add(str(puzzle))
             return []
+        elif puzzle.is_solved():
+            return [puzzle]
         else:
             # we don't want to see this again.
             # this only applies for word ladder so far...we don't wanna go
@@ -127,7 +127,7 @@ class DfsSolver(Solver):
         # randomized tests
 
 
-# TODO (Task 2): implement the solve method in the BfsSolver class.
+# (Task 2): implement the solve method in the BfsSolver class.
 # Hint: You may find a Queue useful here.
 def _get_parent_puz(dik: dict, puz_to: Puzzle) -> Optional[Puzzle]:
     """
@@ -215,7 +215,7 @@ class BfsSolver(Solver):
             if (seen is not None and str(curr) in seen) or curr.fail_fast():
                 # fail, discard this state.
                 # add to seen?
-                # TODO may delete this in the future check with stuff...
+                # may delete this in the future check with stuff...
                 if str(curr) not in seen:
                     seen.add(str(curr))
                 # delete from dict potentially
@@ -239,16 +239,14 @@ class BfsSolver(Solver):
             # so this is essentially the else block but it's not in an else
             # block so pyTA won't complain. I am so cool.
             for puz in curr.extensions():
-                # TODO check this
                 if str(puz) not in seen:
                     game_q.enqueue(puz)
                     # LOW IQ CODE UPCOMING
                     _add_to_dict(stated, curr, puz)
-                    # TODO IMPLEMENT DIFFERENT WAY OF FINDING QUICKEST SOL
-                    # THE DICTIONARY GETS OVERWROTE A LOT
+                    # IMPLEMENT DIFFERENT WAY OF FINDING QUICKEST SOL
             # we will add it to seen because at this point we already
             # processed it, shouldn't see it again.
-            # TODO: is this good? who knows?
+            # is this good? who knows?
             seen.add(str(curr))
         return ret_lst
         # use the fail_fast and is_solved puzzle methods also extensions

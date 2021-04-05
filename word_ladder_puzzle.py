@@ -89,7 +89,7 @@ class WordLadderPuzzle(Puzzle):
         # set of characters to use for 1-character changes
         self._chars = LETTERS
 
-    # TODO (Task 3): override __eq__
+    # (Task 3): override __eq__
     def __eq__(self, other: WordLadderPuzzle) -> bool:
         """
         Return whether WordLadderPuzzle self is equivalent to other.
@@ -114,7 +114,7 @@ class WordLadderPuzzle(Puzzle):
             lst.append(1)
         return lst == [1, 1, 1]
 
-    # TODO (Task 3): override __str__
+    # (Task 3): override __str__
     def __str__(self) -> str:
         """
         Return a human-friendly string representing this WordLadderPuzzle's
@@ -132,7 +132,7 @@ class WordLadderPuzzle(Puzzle):
         strong = str(self.from_word) + ' -> ' + str(self.to_word)
         return strong
 
-    # TODO (Task 3): override is_solved
+    # (Task 3): override is_solved
     # Note: A WordLadderPuzzle is solved when from_word is the same as its
     # to_word
     def is_solved(self) -> bool:
@@ -148,8 +148,8 @@ class WordLadderPuzzle(Puzzle):
         """
         return self.from_word == self.to_word
 
-    # TODO (Task 3): override extensions
-    # TODO TEST THAT EXTENSIONS CONTAINS EVERYTHING WE NEED IN THE RIGHT ORDER
+    # (Task 3): override extensions
+    # TEST THAT EXTENSIONS CONTAINS EVERYTHING WE NEED IN THE RIGHT ORDER
     # legal extensions are valid WordLadderPuzzles that have a from_word that
     # differs from this WordLadderPuzzle's from_word by exactly one character
     def extensions(self) -> List[WordLadderPuzzle]:
@@ -195,10 +195,13 @@ class WordLadderPuzzle(Puzzle):
         return sorted(newlst, key=self._word_score)
         # return newlst
 
-    # TODO TEST THIS
+    # TEST THIS
     def _word_score(self, puz: WordLadderPuzzle) -> int:
         """Returns the number of differences between the from word of a puzzle
         and the to_word of this puzzle.
+
+        Precondition: puz is an extension of the current puzzle, meaning that
+        the to word and from word are the same length.
         """
         counter = 0
         word = puz.from_word
@@ -210,7 +213,7 @@ class WordLadderPuzzle(Puzzle):
                 counter += 1
         return counter
 
-    # TODO (Task 3): implement get_difficulty
+    # (Task 3): implement get_difficulty
     # Note: implementing this requires you to have completed Task 2
     # Hint: Think about which of BfsSolver and DfsSolver is the right
     #       solver for the task at hand. (You may add any required
@@ -237,6 +240,12 @@ class WordLadderPuzzle(Puzzle):
         >>> wl1 = WordLadderPuzzle("me", "my", {"me", "be", "my"})
         >>> wl1.get_difficulty()
         'trivial'
+        >>> wl2 = WordLadderPuzzle("stair", "cased")
+        >>> wl2.get_difficulty()
+        'hard'
+        >>> wl3 = WordLadderPuzzle("bruh", "dick", {"bruh", "dick"})
+        >>> wl3.get_difficulty()
+        'impossible'
         """
         x = BfsSolver()
         y = x.solve(self)
@@ -250,7 +259,8 @@ class WordLadderPuzzle(Puzzle):
             return EASY
         elif len(y) < 6:
             return MEDIUM
-        elif len(y) >= 6:
+        else:
+            # length >= 6
             # start, 1, 2, 3, 4, solved
             return HARD
 
