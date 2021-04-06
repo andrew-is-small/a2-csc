@@ -2,8 +2,6 @@
 Really shitty code, written by github.com/dungwoong
 Used to test random stuff
 """
-from sudoku_puzzle import SudokuPuzzle
-from word_ladder_puzzle import WordLadderPuzzle, MEDIUM
 from expression_tree_puzzle import ExpressionTreePuzzle
 from expression_tree import ExprTree
 from sudoku_puzzle import SudokuPuzzle
