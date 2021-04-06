@@ -36,7 +36,7 @@ Tip: if you put your mouse inside a pytest function and right click, the "run"
 menu will give you the option of running just that test function.
 """
 from sudoku_puzzle import SudokuPuzzle
-from word_ladder_puzzle import WordLadderPuzzle, EASY, TRIVIAL
+from word_ladder_puzzle import WordLadderPuzzle, EASY, TRIVIAL, MEDIUM
 from expression_tree import ExprTree, construct_from_list
 from expression_tree_puzzle import ExpressionTreePuzzle
 from solver import BfsSolver, DfsSolver
@@ -167,6 +167,12 @@ def test_word_ladder_get_difficulty() -> None:
 
     wl2 = WordLadderPuzzle("come", "done", {"come", "cone", "done"})
     assert wl2.get_difficulty() == EASY
+
+
+def test_word_ladder_get_difficulty1() -> None:
+    wl1 = WordLadderPuzzle("cost", "save", {"cost", "cast", "case",
+                          "cave", "rave", "have", "save"})
+    assert wl1.get_difficulty() == MEDIUM
 
 
 def test_expression_tree_eval_doctest() -> None:
