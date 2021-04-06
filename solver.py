@@ -65,7 +65,6 @@ class Solver:
 
 
 # (Task 2): implement the solve method in the DfsSolver class.
-# TEST BITCH2
 # seen is not none may not be necessary cuz we initialize seen everytime
 # Your solve method MUST be a recursive function (i.e. it must make
 # at least one recursive call to itself)
@@ -108,8 +107,6 @@ class DfsSolver(Solver):
             return [puzzle]
         else:
             # we don't want to see this again.
-            # this only applies for word ladder so far...we don't wanna go
-            # backwards
             # THIS MAY REACH MAXIMUM RECURSION DEPTH UNINTENTIONALLY
             # we have to sort puzzle extensions in word ladder puzzle xd
             seen.add(str(puzzle))
@@ -122,9 +119,6 @@ class DfsSolver(Solver):
                     return [puzzle] + variable
             return []
         # scuffed code, run tests
-        # you can assert the conditions that everything is in extensions and
-        # first ting is the puzzle, last is solved. This would be good for
-        # randomized tests
 
 
 # (Task 2): implement the solve method in the BfsSolver class.
@@ -191,22 +185,14 @@ class BfsSolver(Solver):
         """
         # THIS CODE IS HORRENDOUS WTF
         # I don't think it needs recursion though...? this should be ok
-
-        # our queue will literally just be a list that we pop off of
-        # we're gonna enqueue more than we dequeue, so let's
-        # APPEND TO ENQUEUE, POP(0) TO DEQUEUE
         game_q = Queue()
         game_q.enqueue(puzzle)
         seen = set()
         # ####################################################
-        # ok so dict will have parent: puzzles
-        # this is gonna take up so much memory but please don't worry ok...
+        # le dict
         stated = {}
-        # maybe implement a dictionary that stores the thing with a numerical
-        # key, and then look for it to take up less memory?? who knows LOL
         ret_lst = []
 
-        # change the while condition
         while not game_q.is_empty():
             curr = game_q.dequeue()
             # print(curr)
@@ -218,7 +204,6 @@ class BfsSolver(Solver):
                 # may delete this in the future check with stuff...
                 if str(curr) not in seen:
                     seen.add(str(curr))
-                # delete from dict potentially
                 continue
             # this one uses break
             elif curr.is_solved():

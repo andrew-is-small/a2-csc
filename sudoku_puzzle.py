@@ -309,27 +309,32 @@ class SudokuPuzzle(Puzzle):
         if not any(EMPTY_CELL in row for row in symbols):
             return False
 
-        # maybe I'm just a clown bastard
-        def check_possible(ar: int, ac: int) -> bool:
-            allowed_symbols = (self._symbol_set
-                               - (self._row_set(ar)
-                                  | self._column_set(ac)
-                                  | self._subsquare_set(ar, ac)))
-            if not allowed_symbols:
-                # if the list is []
-                return False
-            return True
-
         # look for empty cells, check if a bitch is possible in the cell
         for r in range(0, len(symbols)):
             for c in range(0, len(symbols[r])):
-                if symbols[r][c] == EMPTY_CELL and not check_possible(r, c):
+                if symbols[r][c] == EMPTY_CELL and not \
+                        self._check_possible(r, c):
                     # empty cell and no possible symbols, should return t
                     return True
         # no empty cells with no possible symbols
         return False
 
-        # some private helper methods
+    def _check_possible(self, ar: int, ac: int) -> bool:
+        """Returns true if it is possible for row ar column ac to be filled
+        with a character from the symbol set.
+
+        Precondition: Row ar column ac is a blank space.
+        """
+        allowed_symbols = (self._symbol_set
+                           - (self._row_set(ar)
+                              | self._column_set(ac)
+                              | self._subsquare_set(ar, ac)))
+        if not allowed_symbols:
+            # if the list is []
+            return False
+        return True
+
+    # some private helper methods
 
     # Note: these return sets of symbols you may find useful
     def _row_set(self, r: int) -> Set[str]:

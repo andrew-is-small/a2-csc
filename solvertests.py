@@ -135,7 +135,6 @@ def test_sols_or_smth():
 
 
 # #### EXPRESSION TREE
-# TODO test construct from list
 def test_construct_from_list():
     c = construct_from_list([['+'], ['a', 3, '*', '+'], ['b', 'c'], ['d', 1]])
     mult_tree = ExprTree('*', [ExprTree('b', []), ExprTree('c', [])])
@@ -143,6 +142,12 @@ def test_construct_from_list():
     mein = ExprTree('+',
                     [ExprTree('a', []), ExprTree(3, []), mult_tree, plus_tree])
     assert c == mein
+
+
+def test_construct_from_list2():
+    c = construct_from_list([[3]])
+    a = ExprTree(3, [])
+    assert c == a
 
 
 # #### SUDOKU
@@ -192,4 +197,8 @@ def tezt():
 # test_wl_extensions()
 # test_one_move()
 # test_already_solved_sudoku()
-test_construct_from_list()
+# test_construct_from_list2()
+a = True
+if a:
+    print("testing all...")
+    tezt()
