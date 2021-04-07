@@ -173,17 +173,16 @@ class WordLadderPuzzle(Puzzle):
         newlst = []
         for i in self.word_set:  # i is all possible words to turn into
             # splits word to letters
-            bruh = []
-            bruh[:] = i
+            # i is the potential extension
             # splits from word to letters
-            og = []
-            og[:] = self.from_word
+            # self.from_word is from word
             counter = 0
-            if len(bruh) != len(og):
+            if len(self.from_word) != len(i):
                 continue
-            for letter in range(len(bruh)):  # checks each letter in
+            # now we know i and from word are same length
+            for letter in range(len(i)):  # checks each letter in
                 # possible word i
-                if bruh[letter] != og[letter]:
+                if self.from_word[letter] != i[letter]:
                     counter += 1
             if counter == 1:
                 x = WordLadderPuzzle(i, self.to_word, self.word_set)

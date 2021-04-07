@@ -112,7 +112,9 @@ def test_one_move():
 
 # #### WORD LADDER PUZZLE
 def test_sols_or_smth():
-    a = WordLadderPuzzle('stair', 'cased')
+    # stair cased
+    # watt pews
+    a = WordLadderPuzzle('rages', 'rider')
     sol = [DfsSolver(), BfsSolver()]
     lst = []
     print("solving")
@@ -123,6 +125,7 @@ def test_sols_or_smth():
         print("solved by", solver)
     # wanna make sure list length is either 0
     for solution in lst:
+        print("solution with length:", len(solution))
         if len(solution) == 0:
             continue
         for i in range(len(solution)):
@@ -198,7 +201,9 @@ def tezt():
 # test_one_move()
 # test_already_solved_sudoku()
 # test_construct_from_list2()
-a = True
+a = False
 if a:
     print("testing all...")
     tezt()
+
+test_sols_or_smth()
